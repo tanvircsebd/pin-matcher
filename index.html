@@ -118,6 +118,7 @@
             }
             else if(userInput!=pin){
                 document.getElementById("mismatch").style.display='block';
+                document.getElementById("match").style.display='none';
                 document.getElementById("output-value").value = "";
                 var tryCount = document.getElementById("tryCount").innerText;
                 var tryTimes = parseInt(tryCount);
