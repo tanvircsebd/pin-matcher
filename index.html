@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pin Generator</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <div class="row">
+            <div class="col-md-6">
+                <div class="pin-generator half-width">
+                    <input id="pin-placeholder" class="form-control" type="text">
+                    <button id="generate-pin" class="generate-btn">Generate Pin</button>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="input-section half-width">
+                    <input id="output-value" class="form-control" type="text">
+                    <div class="numbers">
+                        <div class="calc-body">
+                            <div class="calc-button-row">
+                              <div class="button" onclick="getCalcInput(7)">7</div>
+                              <div class="button" onclick="getCalcInput(8)">8</div>
+                              <div class="button" onclick="getCalcInput(9)">9</div>
+                            </div>
+                            <div class="calc-button-row">
+                              <div class="button" onclick="getCalcInput(4)">4</div>
+                              <div class="button" onclick="getCalcInput(5)">5</div>
+                              <div class="button" onclick="getCalcInput(6)">6</div>
+                            </div>
+                            <div class="calc-button-row">
+                              <div class="button" onclick="getCalcInput(1)">1</div>
+                              <div class="button" onclick="getCalcInput(2)">2</div>
+                              <div class="button" onclick="getCalcInput(3)">3</div>
+                            </div>
+                            <div class="calc-button-row">
+                                <div class="button" id="backspace"><</div>
+                                <div class="button" onclick="getCalcInput(0)">0</div>
+                                <div class="button" id="clear">C</div>
+                            </div>
+                            <div>
+                                <button type="submit" id="submit" class="submit-btn">Submit</button>
+                                <p class="action-left" id="tryAttempt"> <span id="tryCount">3</span> try left</p>
+                            </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+        <div class="notify-section">
+            <p class="notify" id="mismatch">❌ Pin Didn't Match, Please try again</p>
+            <p class="notify" id="match">✅ Pin Matched... Secret door is opening for you</p>
+        </div>
+    </div>
+    <script>
+        var notify = document.getElementsByClassName('notify');
+        for (var i=0, len=notify.length; i<len; i=i+1) {
+            notify[i].style.display = 'none';
+        }
+        document.getElementById("generate-pin").addEventListener("click", function(){
+            document.getElementById("pin-placeholder").value=getRandomNumber(1000,9999);
+        })
+
+       function getRandomNumber(min, max){
+            return Math.floor(Math.random() * (max - min)) + min;
+        }    
+        function getCalcInput(num){
+            var digit = document.getElementById("output-value");
+            switch(num){
+                case 1:
+                    digit.value += "1";
+                    break;
+                case 2:
+                    digit.value += "2";
+                    break;
+                case 3:
+                    digit.value += "3";
+                    break;
+                case 4:
+                    digit.value += "4";
+                    break;
+                case 5:
+                    digit.value += "5";
+                    break;
+                case 6:
+                    digit.value += "6";
+                    break;
+                case 7:
+                    digit.value += "7";
+                    break;
+                case 8:
+                    digit.value += "8";
+                    break;
+                case 9:
+                    digit.value += "9";
+                    break;
+                case 0:
+                    digit.value += "0";
+                    break;
+                }
+            }    
+
+        document.getElementById("submit").addEventListener("click", function(){
+            var pin = document.getElementById("pin-placeholder").value;
+            var userInput = document.getElementById("output-value").value;
+            if(userInput == '' || pin == ''){
+               alert("please generate pin and then enter 4 digit user pin");
+            }
+            else if(userInput == pin){
+                document.getElementById("match").style.display='block';
+                document.getElementById("mismatch").style.display='none';
+                document.getElementById("pin-placeholder").value = "";
+                document.getElementById("output-value").value = "";
+                document.getElementById("tryAttempt").style.display="none";
+            }
+            else if(userInput!=pin){
+                document.getElementById("mismatch").style.display='block';
+                document.getElementById("output-value").value = "";
+                var tryCount = document.getElementById("tryCount").innerText;
+                var tryTimes = parseInt(tryCount);
+                var tryCount = tryTimes - 1;
+                document.getElementById("tryCount").innerText = tryCount;
+
+                if(tryCount == 0){
+                    document.getElementById('submit').disabled = true;
+                    var message = document.getElementById("tryAttempt").innerText;
+                    var string = " please reload again";
+                    var newMessage = message.concat(string);
+                    document.getElementById("tryAttempt").innerText = newMessage;
+                }
+            }
+        })
+
+        document.getElementById("clear").addEventListener("click", function(){
+            document.getElementById("output-value").value = "";
+        })
+
+        document.getElementById("backspace").addEventListener("click", function(){
+        var display = document.getElementById("output-value");
+        var calcDisplay = display.value;
+            calcDisplay = calcDisplay.substring(0, calcDisplay.length-1)
+            display.value = calcDisplay;
+        })  
+
+</script>
+</body>
+</html>
